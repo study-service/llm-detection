@@ -19,8 +19,7 @@ import time
 import typing
 import bittensor as bt
 import asyncio
-import random
-import threading
+
 
 # Bittensor Miner Template:
 import detection
