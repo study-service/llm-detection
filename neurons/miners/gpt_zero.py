@@ -19,17 +19,17 @@ class GPT2PPL:
     # Hello-SimpleAI/HC3
     # gpt2
     # gpt2-medium
-    def __init__(self, device="cuda", model_id="allenai/c4"):
+    def __init__(self, device="cuda", model_id="gpt2-medium"):
         bt.logging.info(f"Running model_id = {model_id}")
         self.device = device
         self.model_id = model_id
         kwargs = {
             "use_auth_token": "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"
         }
-        self.model = GPT2LMHeadModel.from_pretrained(model_id, **kwargs).to(device)
+        self.model = GPT2LMHeadModel.from_pretrained(model_id).to(device)
         # self.model = AutoModelForSequenceClassification.from_pretrained("Hello-SimpleAI/HC3")
 
-        self.tokenizer = GPT2TokenizerFast.from_pretrained(model_id, **kwargs)
+        self.tokenizer = GPT2TokenizerFast.from_pretrained(model_id)
 
         self.max_length = self.model.config.n_positions
         self.stride = 512
