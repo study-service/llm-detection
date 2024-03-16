@@ -67,37 +67,22 @@ class Miner(BaseMinerNeuron):
         input_data = synapse.texts
         bt.logging.info(f"Amount of texts recieved: {len(input_data)}")
 
-        try:
-            # Asynchronously process each text
-            # with ThreadPoolExecutor() as executor:
-            #     # Asynchronously process each text and gather the results.
-            #     preds = list(executor.map(self.process_text, input_data))
-            preds = await asyncio.gather(*[self.process_text(text) for text in input_data])
-        except Exception as e:
-            bt.logging.error(f"Error processing texts: {e}")
-            preds = [0] * len(input_data)
+        preds = []
+        for text in input_data:
+            try:
+                pred_prob = self.model(text) > 0.8
+            except Exception as e:
+                pred_prob = 0
+                bt.logging.error('Couldnt proceed text "{}..."'.format(input_data))
+                bt.logging.error(e)
+
+            preds.append(pred_prob)
 
         bt.logging.info(f"Made predictions in {int(time.time() - start_time)}s")
 
         synapse.predictions = preds
         return synapse
 
-    async def process_text(self, text: str) -> int:
-        """
-        Process a single text and return the prediction.
-
-        Args:
-            text (str): The text to process.
-
-        Returns:
-            int: The prediction result.
-        """
-        try:
-            pred_prob = self.model(text) > 0.8
-        except Exception as e:
-            pred_prob = 0
-            bt.logging.error(f"Error processing text: {e}")
-        return pred_prob
 
     async def blacklist(
         self, synapse: detection.protocol.TextSynapse
