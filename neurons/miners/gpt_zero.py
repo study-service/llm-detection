@@ -15,18 +15,21 @@ import bittensor as bt
 
 
 class GPT2PPL:
-    #model_id
-    #Hello-SimpleAI/HC3
-    #gpt2
-    #gpt2-medium
+    # model_id
+    # Hello-SimpleAI/HC3
+    # gpt2
+    # gpt2-medium
     def __init__(self, device="cuda", model_id="allenai/c4"):
         bt.logging.info(f"Running model_id = {model_id}")
         self.device = device
         self.model_id = model_id
-        self.model = GPT2LMHeadModel.from_pretrained(model_id).to(device)
+        kwargs = {
+            "use_auth_token": "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"
+        }
+        self.model = GPT2LMHeadModel.from_pretrained(model_id, **kwargs).to(device)
         # self.model = AutoModelForSequenceClassification.from_pretrained("Hello-SimpleAI/HC3")
 
-        self.tokenizer = GPT2TokenizerFast.from_pretrained(model_id)
+        self.tokenizer = GPT2TokenizerFast.from_pretrained(model_id, **kwargs)
 
         self.max_length = self.model.config.n_positions
         self.stride = 512
