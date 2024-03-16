@@ -82,7 +82,7 @@ class Miner(BaseMinerNeuron):
         synapse.predictions = preds
         return synapse
 
-    def process_text(self, text: str) -> int:
+    async def process_text(self, text: str) -> int:
         """
         Process a single text and return the prediction.
 
